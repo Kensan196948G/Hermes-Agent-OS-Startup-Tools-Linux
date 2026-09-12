@@ -20,16 +20,19 @@
     },
     "environment": { "type": "object" },
     "target_stack": { "type": "object" },
-    "catalog_snapshot": {
+    "catalog_verified_after_install": {
       "type": "object",
       "properties": {
         "installable_skills": { "type": "integer", "minimum": 0 },
-        "capability_families": { "type": "integer", "minimum": 0 },
-        "skill_dirs_on_disk": { "type": "integer", "minimum": 0 }
+        "role_directories": { "type": "integer", "minimum": 0 },
+        "capability_families": { "type": "integer", "minimum": 0 }
       }
     },
+    "memory_layout_verified": { "type": "object" },
+    "bugs_found_and_fixed": { "type": "object" },
     "deliverables": { "type": "object" },
-    "known_gaps": { "type": "object" }
+    "open_items": { "type": "object" },
+    "model_routing_readiness_verified": { "type": "object" }
   },
   "additionalProperties": true
 }
