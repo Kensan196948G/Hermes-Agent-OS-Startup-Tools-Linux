@@ -81,6 +81,28 @@ teardown() {
   assert_output_contains '未導入'
 }
 
+@test "sessions: session_start_background quotes extra args safely for tmux (no shell injection)" {
+  local bindir="${TEST_HOME}/bin"
+  mkdir -p "$bindir"
+  stub_hermes "$bindir"
+
+  # 実 tmux は new-session の shell-command 引数を自身のシェルで解釈して実行する。
+  # このスタブはその挙動を最小限再現し、未クォート連結が復活していないかを検証する。
+  cat > "${bindir}/tmux" <<'STUB'
+#!/usr/bin/env bash
+last="${@: -1}"
+sh -c "$last" 2>/dev/null
+STUB
+  chmod +x "${bindir}/tmux"
+
+  local marker="${TEST_HOME}/INJECTED"
+
+  run env HOME="$TEST_HOME" NO_COLOR=1 PATH="${bindir}:/usr/bin:/bin" \
+    bash -c "source '${PROJECT_ROOT}/lib/bootstrap.sh'; session_start_background proj '${TEST_HOME}' '; touch ${marker}'"
+
+  [ ! -f "$marker" ]
+}
+
 # ---------- yaml ----------
 
 @test "yaml: yaml_get reads a top-level key" {

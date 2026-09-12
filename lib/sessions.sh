@@ -119,15 +119,20 @@ session_start_background() {
   log_step "バックグラウンド起動: $name"
   log_dim "  workdir: $workdir"
 
+  # tmux new-session は shell-command を単一文字列として自身のシェルへ渡すため、
+  # 各引数を printf %q で個別にクォートしてから連結する
+  # (未クォート連結は将来 extra args が配線された際のコマンドインジェクションになる)。
+  local shell_cmd; shell_cmd="$(printf '%q ' "$hcmd" "$@")"
+
   if [[ "$DRY_RUN" == "1" ]]; then
-    printf '%s[DRY-RUN]%s tmux new-session -d -s %s -c %s '%s' %s\n' \
-      "$C_CYAN" "$C_RESET" "$name" "$workdir" "$hcmd" "$*"
+    printf '%s[DRY-RUN]%s tmux new-session -d -s %s -c %s %s\n' \
+      "$C_CYAN" "$C_RESET" "$name" "$workdir" "$shell_cmd"
     return 0
   fi
 
   # ログを残す: tmux の出力を log ディレクトリへ
   "$(hermes_cmd)" >/dev/null 2>&1 || true   # 存在確認を兼ねる (失敗は無視)
-  tmux new-session -d -s "$name" -c "$workdir" "$hcmd $*" 2>/dev/null || {
+  tmux new-session -d -s "$name" -c "$workdir" "$shell_cmd" 2>/dev/null || {
     log_error "tmux セッションの作成に失敗しました。"
     return 1
   }
