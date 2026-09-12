@@ -1,0 +1,12 @@
+# shellcheck 設定
+#
+# SC2034 (unused variable) を除外する理由:
+#   lib/paths.sh と lib/common.sh が定義する readonly 変数 (HERMES_HOME,
+#   OMH_HOME, HERMES_CONFIG, CATALOG_FILE 等) は、他の lib/*.sh から
+#   参照される共有の契約である。ファイル単位で静的解析すると
+#   「未使用」に見えるが、これは設計上の意図である。
+#
+# SC1090/SC1091 (non-constant source) を除外する理由:
+#   bootstrap.sh は ${HERMESOS_LIB_DIR} 経由で動的に source する。
+#
+disable=SC2034,SC1090,SC1091

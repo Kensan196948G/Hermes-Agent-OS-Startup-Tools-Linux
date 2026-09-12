@@ -1,0 +1,349 @@
+{
+  "schema_version": "hermesos_state/v1",
+  "name": "HermesAgentOS-StartUpTools-Linux",
+  "version": "1.0.0-linux",
+  "generated_at": "2026-09-12T19:50:00+09:00",
+  "evidence_boundaries": {
+    "note": "本ファイルの値は OBSERVED / SNAPSHOT / UNVERIFIED を明示する。推測を事実として書かない。",
+    "classes": [
+      "OBSERVED",
+      "SNAPSHOT",
+      "UNVERIFIED"
+    ]
+  },
+  "environment": {
+    "os": {
+      "value": "Ubuntu 24.04.4 LTS",
+      "class": "OBSERVED",
+      "how": "cat /etc/os-release"
+    },
+    "arch": {
+      "value": "x86_64",
+      "class": "OBSERVED",
+      "how": "uname -m"
+    },
+    "wsl": {
+      "value": false,
+      "class": "OBSERVED",
+      "how": "/proc/version"
+    },
+    "root": {
+      "value": false,
+      "class": "OBSERVED",
+      "how": "id -u"
+    },
+    "tools_present": {
+      "value": [
+        "bash",
+        "curl",
+        "git",
+        "jq",
+        "tmux",
+        "rg",
+        "ffmpeg",
+        "node",
+        "npm",
+        "python3",
+        "pnpm",
+        "pipx",
+        "shellcheck",
+        "bats",
+        "systemctl",
+        "docker",
+        "uv",
+        "hermes",
+        "omh"
+      ],
+      "class": "OBSERVED",
+      "how": "./start.sh prereq"
+    }
+  },
+  "target_stack": {
+    "hermes_agent": {
+      "repo": "https://github.com/NousResearch/hermes-agent",
+      "installer": "https://hermes-agent.nousresearch.com/install.sh",
+      "installed": {
+        "value": true,
+        "version": "Hermes Agent v0.21.2 (2026.9.11) · upstream b7b35a84",
+        "class": "OBSERVED",
+        "how": "hermes --version"
+      },
+      "install_layout": {
+        "code": "~/.hermes/hermes-agent",
+        "binary": "~/.local/bin/hermes",
+        "data": "~/.hermes/",
+        "config": "~/.hermes/config.yaml",
+        "secrets": "~/.hermes/.env",
+        "class": "OBSERVED",
+        "source": "installer output"
+      },
+      "bundled_skills_synced": {
+        "value": 58,
+        "path": "~/.hermes/skills",
+        "class": "OBSERVED",
+        "how": "installer: 'Done: 58 new, 0 updated, 0 unchanged. 58 total bundled.'"
+      }
+    },
+    "oh_my_hermes": {
+      "repo": "https://github.com/rlaope/oh-my-hermes",
+      "commands_human": [
+        "omh setup",
+        "omh update",
+        "omh doctor"
+      ],
+      "installed": {
+        "value": true,
+        "version": "omh 2.0.3",
+        "source_ref": "v2.0.3",
+        "class": "OBSERVED",
+        "how": "omh --version"
+      },
+      "install_path": {
+        "venv": "~/.local/share/omh/venv",
+        "command": "~/.local/bin/omh",
+        "class": "OBSERVED"
+      },
+      "setup_artifacts": {
+        "skills_dir": "~/.omh/skills",
+        "plugin_bridge": "~/.hermes/plugins/omh",
+        "routing_file": "~/.omh/routing/model-chains.json",
+        "providers_file": "~/.omh/routing/providers.json",
+        "dispatch_models": "~/.omh/routing/dispatch-models.json",
+        "runtime_state": "~/.omh/runtime/state.json",
+        "hermes_config_key": "skills.external_dirs",
+        "class": "OBSERVED"
+      },
+      "upstream_doctor": {
+        "value": "ok — 48/48 checks passing, 0 blocking, 1 warning (optional surfaces)",
+        "class": "OBSERVED",
+        "how": "omh doctor"
+      }
+    }
+  },
+  "catalog_verified_after_install": {
+    "class": "OBSERVED",
+    "how": "./start.sh skills summary (installed mode)",
+    "data_source": "~/.omh/skills (実インストール)",
+    "installable_skills": 123,
+    "role_directories": 9,
+    "capability_families": 6,
+    "role_breakdown": {
+      "operator": 37,
+      "guide": 18,
+      "tracker": 18,
+      "planner": 12,
+      "reviewer": 12,
+      "researcher": 9,
+      "ultrawork": 9,
+      "memory-keeper": 5,
+      "handoff-guide": 3
+    },
+    "layout_discovered": "~/.omh/skills/<role>/<skill-name>/SKILL.md (3 段)",
+    "workflow_tagged_skills": 123,
+    "context_cost": {
+      "value": "123 skills ≈ 43050 tokens of up-front context",
+      "class": "OBSERVED",
+      "how": "omh doctor advice: installed_skill_context_weight"
+    },
+    "public_site_claims": {
+      "skills": 116,
+      "workflows": 9,
+      "families": 7,
+      "languages": 8,
+      "class": "UNVERIFIED",
+      "note": "公開ページの掲載値。実測 123 skills / 6 families と一致しないため、本ツールは実測を優先表示する。"
+    },
+    "hermes_registry_totals": {
+      "class": "OBSERVED",
+      "how": "hermes skills list",
+      "raw": "0 hub-installed, 53 builtin, 123 local — 176 enabled, 0 disabled",
+      "hub_installed": 0,
+      "builtin": 53,
+      "local": 123,
+      "enabled": 176,
+      "disabled": 0,
+      "reconciliation": "bundled 58 (disk) + OMH 123 = 181; 5 names overlap (planner, researcher, reviewer, operator, memory-keeper) => 176 unique enabled.",
+      "tui_reported": "177 skills in 20 categories (startup banner)",
+      "note": "本ツールは当初 OMH 分の 123 のみを表示していた。Hermes 自身の集計 (176) を併記して誤解を解消した。"
+    },
+    "roles_vs_categories": {
+      "class": "OBSERVED",
+      "roles": "OMH が ~/.omh/skills 配下で skills を置くディレクトリ (9 種)",
+      "categories": "Hermes 自身の分類 (TUI の category 列、20 種)",
+      "note": "直交する2つの軸。同じ 1 スキルが両方の属性を持つ。実装当初この区別がなく、category と役割を混同しうる表示だった。"
+    }
+  },
+  "memory_layout_verified": {
+    "class": "OBSERVED",
+    "how": "hermes doctor",
+    "paths": {
+      "memories_dir": "~/.hermes/memories/",
+      "MEMORY.md": "~/.hermes/memories/MEMORY.md (未作成 — 最初の記憶書き込みで作成)",
+      "USER.md": "~/.hermes/memories/USER.md (未作成)",
+      "state_db": "~/.hermes/state.db (0 sessions at install time)",
+      "omh_runtime_state": "~/.omh/runtime/state.json"
+    },
+    "note": "ディレクトリ名は複数形 'memories' が正しい。実装当初 'memory' と誤っていたのを実測で修正した。"
+  },
+  "bugs_found_and_fixed": {
+    "class": "OBSERVED",
+    "items": [
+      {
+        "id": "tilde-expansion",
+        "symptom": "config.json の '~/.hermes' が $HOME/~/.hermes になっていた",
+        "cause": "JSON パース後の値はシェル展開されない",
+        "fix": "expand_path() を追加",
+        "regression_test": "config.bats"
+      },
+      {
+        "id": "dry-run-false-success",
+        "symptom": "dry-run なのに 'installer が完了しました' と表示",
+        "cause": "run() が dry-run を吸収するのに成功メッセージを無条件出力",
+        "fix": "dry-run を早期 return し「未実行です」と明示",
+        "regression_test": "routing-sessions.bats"
+      },
+      {
+        "id": "evidence-self-contradiction",
+        "symptom": "観測 0 件で『実測に基づいています』と合格を返した",
+        "cause": "fail フラグのみを見て観測数を数えていなかった",
+        "fix": "observed カウンタを導入し 0 件なら不合格",
+        "regression_test": "doctor.bats"
+      },
+      {
+        "id": "skills-depth-mismatch",
+        "symptom": "OMH を setup 済みでも『未 setup』と誤判定し snapshot 値を表示",
+        "cause": "実レイアウトは <role>/<skill>/SKILL.md の3段なのに、/*/SKILL.md (1段) の glob で検出していた",
+        "fix": "深さ非依存の find に変更し、役割ディレクトリを実測表示",
+        "regression_test": "catalog.bats (depth 3 / deeper)",
+        "discovered_after": "実インストール後の検証"
+      },
+      {
+        "id": "yaml-multiline-silent-default",
+        "symptom": "skills.external_dirs のような複数行配列が既定値として黙って返る",
+        "cause": "最小 YAML パーサが配列非対応で、キー不在と読めない値を区別していなかった",
+        "fix": "番兵値 __YAML_MULTILINE__ を返し yaml_list_get() を追加",
+        "regression_test": "routing-sessions.bats"
+      },
+      {
+        "id": "memory-path-singular",
+        "symptom": "記憶ディレクトリを 'memory' と誤記",
+        "cause": "推測でパスを決めていた",
+        "fix": "hermes doctor の実測に基づき 'memories' に修正",
+        "regression_test": "doctor.bats"
+      },
+      {
+        "id": "test-mutated-shared-config",
+        "symptom": "テストが実プロジェクトの config/config.json を一時的に破壊してから復元していた",
+        "cause": "隔離 HOME だけでは不十分で、共有ファイルを直接書き換えていた",
+        "fix": "HERMESOS_CONFIG_FILE で隔離した壊れたファイルを指すよう変更。共有ファイルを触らない",
+        "note": "共有ファイル破壊は独立した危険として修正済み。"
+      },
+      {
+        "id": "omh-only-count-confusion",
+        "symptom": "TUI が 177 skills / 20 categories と表示するのに、本ツールは 123 / 9 roles とだけ表示し、数字が食い違って見えた",
+        "cause": "OMH 分の 123 のみを表示し、Hermes 自身の集計 (builtin 含む 176) を併記していなかった。また役割と category を区別していなかった",
+        "fix": "hermes skills list の集計行を解析して総数を併記し、役割と category が直交する軸であることを明示",
+        "regression_test": "catalog.bats (totals line parsing)"
+      },
+      {
+        "id": "test-host-install-leak",
+        "symptom": "PATH に ~/.local/bin がある状態で 5 テストが失敗 (pass=50 fail=5)。以前は『再現しない稀な失敗』と誤認していた",
+        "cause": "hermes_installed()/omh_installed() は has_cmd (PATH 検索) と絶対パスを見るため、テストが実インストールを検出し『未導入』前提のアサーションが崩れた。HERMES_BIN の差し替えだけでは不十分で、has_cmd が PATH 上の実バイナリを拾っていた",
+        "fix": "テストで空ディレクトリを PATH 先頭に置き PATH 検索を塞ぐ + HERMES_BIN/OMH_BIN を存在しないパスへ。run_iso/iso ヘルパに集約し、inline の env 呼び出しにも適用",
+        "regression_test": "全 55 件が PATH 条件 A/B/C すべてで 55 pass / 0 fail",
+        "lesson": "最初に観測した 1 回の失敗を『環境要因で再現せず』と片付けたのは誤りだった。再現条件は PATH であり、条件を変えれば 100% 再現した。"
+      },
+      {
+        "id": "set-e-local-assignment-masked-failure",
+        "symptom": "上流 omh が失敗すると routing readiness が無言で exit 3 し、graceful な失敗メッセージに到達しなかった",
+        "cause": "'local json=\"$(failing_cmd)\"' は宣言が command substitution の終了コードを返すため set -e がスクリプトごと終了させた。宣言と代入を分離していなかった",
+        "fix": "'local json; json=\"$(...)\" || json=\"\"' に変更。同型の潜在バグを skills-catalog.sh でも修正",
+        "regression_test": "routing-readiness.bats (handles missing/failed upstream gracefully)",
+        "lesson": "失敗経路のテストを書かなければ、この種の set -e バグは正常系では絶対に露出しない"
+      }
+    ]
+  },
+  "deliverables": {
+    "entry": [
+      "start.sh",
+      "bin/menu.sh"
+    ],
+    "libs": 20,
+    "tests": {
+      "framework": "bats",
+      "result": {
+        "value": "65 pass / 0 fail",
+        "class": "OBSERVED",
+        "how": "bats tests/bats/unit/"
+      },
+      "determinism": {
+        "class": "OBSERVED",
+        "conditions": [
+          "PATH without ~/.local/bin → 55 pass / 0 fail",
+          "PATH with ~/.local/bin (real Hermes+OMH installed) → 55 pass / 0 fail",
+          "PATH with real install + HOME redirected → 55 pass / 0 fail"
+        ]
+      }
+    },
+    "lint": {
+      "value": "shellcheck -S warning: clean",
+      "class": "OBSERVED"
+    },
+    "new_features": [
+      "routing readiness (上流 model-routing status --json の要約)",
+      "doctor にモデルルーティング準備度チェックを追加 ([6])"
+    ]
+  },
+  "open_items": {
+    "class": "UNVERIFIED",
+    "from_upstream_doctor": [
+      "Hermes runtime load/use of the OMH plugin is NOT observed yet. Restart or reload Hermes before claiming chat visibility.",
+      "model_routing_readiness: confirmed=0 discovered_only=668 hermes=aliases_unset aliases=0 missing_heads=9",
+      "installed skills add ~43050 tokens of up-front context; tools.tool_search.enabled defaults to auto (threshold_pct 10) — keep it on",
+      "Skills Hub directory not initialized (run: hermes skills list)",
+      "optional surfaces warning (14/14)",
+      "ast-grep not on PATH (code exploration continues with grep/ripgrep)"
+    ]
+  },
+  "model_routing_readiness_verified": {
+    "class": "OBSERVED",
+    "how": "omh coding model-routing status --json (schema model_routing_status/v1)",
+    "status": "needs_confirmation",
+    "confirmed": 0,
+    "discovered_only": 668,
+    "discovered_unique_model_names": 4,
+    "discovery_truncated": true,
+    "source_statuses": {
+      "claude-code": "truncated",
+      "codex": "truncated",
+      "hermes": "unobserved",
+      "omo": "unobserved",
+      "omp": "layout_unverified",
+      "opencode": "truncated",
+      "pi": "unobserved",
+      "senpi": "unobserved"
+    },
+    "hermes_aliases": {
+      "status": "aliases_unset",
+      "recommended_head": "kimi-k3"
+    },
+    "maestro_missing_heads": [
+      "claude-fable-5-1",
+      "gemini-3.1-pro",
+      "glm-5.3",
+      "glm-5.3-flash",
+      "gpt-5.6-luna",
+      "gpt-5.6-terra",
+      "gpt-6-astra",
+      "grok-code-fast",
+      "kimi-k3"
+    ],
+    "owner_learning": {
+      "status": "missing",
+      "path": "~/.omh/routing/owner-preference.json"
+    },
+    "raw_output_size_bytes": 107736,
+    "meaning": "confirmed が 0 = 実行時の委譲先は未証明。discovered 668 件は実行証明ではない。",
+    "upstream_claim_boundary": "Discovered config or session history is not confirmed model availability; confirmed-active configuration is not entitlement, credential validity, dispatch, execution, review, CI, or merge evidence. No network request was made."
+  }
+}

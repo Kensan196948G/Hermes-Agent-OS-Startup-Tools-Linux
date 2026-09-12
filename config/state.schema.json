@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "hermesos_state/v1",
+  "title": "HermesAgentOS StartUpTools state",
+  "type": "object",
+  "required": ["schema_version", "name", "version"],
+  "properties": {
+    "schema_version": { "const": "hermesos_state/v1" },
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "generated_at": { "type": "string" },
+    "evidence_boundaries": {
+      "type": "object",
+      "properties": {
+        "classes": {
+          "type": "array",
+          "items": { "enum": ["OBSERVED", "SNAPSHOT", "UNVERIFIED"] }
+        }
+      }
+    },
+    "environment": { "type": "object" },
+    "target_stack": { "type": "object" },
+    "catalog_snapshot": {
+      "type": "object",
+      "properties": {
+        "installable_skills": { "type": "integer", "minimum": 0 },
+        "capability_families": { "type": "integer", "minimum": 0 },
+        "skill_dirs_on_disk": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "deliverables": { "type": "object" },
+    "known_gaps": { "type": "object" }
+  },
+  "additionalProperties": true
+}

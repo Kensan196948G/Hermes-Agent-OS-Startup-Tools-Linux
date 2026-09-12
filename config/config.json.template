@@ -1,0 +1,28 @@
+{
+  "$schema": "./config.schema.json",
+  "hermes": {
+    "hermes_home": "~/.hermes",
+    "omh_home": "~/.omh"
+  },
+  "install": {
+    "method": "installer",
+    "note": "installer = 公式 curl ワンライナー。他に npm | bun | brew を選べます。"
+  },
+  "runtime": {
+    "foregroundMinutes": 0,
+    "tmuxPrefix": "hermesos"
+  },
+  "gateway": {
+    "autoStart": false,
+    "logFile": "logs/gateway.log"
+  },
+  "safety": {
+    "confirmDestructive": true,
+    "backupBeforeRestore": true,
+    "requireApprovalForInstaller": true
+  },
+  "catalog": {
+    "snapshot": "config/omh-capability-catalog.json",
+    "note": "公開ページの掲載値ではなく、実測値を優先して表示します。"
+  }
+}

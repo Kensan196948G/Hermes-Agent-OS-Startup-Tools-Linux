@@ -1,0 +1,13 @@
+# 実行時に生成されるもの
+logs/*.log
+state/loops/
+backups/
+heartbeat.json
+
+# ローカル設定 (テンプレートから複製する)
+config/config.json
+
+# エディタ / OS
+.DS_Store
+*.swp
+*~

@@ -1,0 +1,30 @@
+{
+  "name": "hermes-agent-os-startup-tools-linux",
+  "version": "1.0.0-linux",
+  "description": "HermesAgentCLI + Oh My Hermes (OMH) startup and operations tools for Linux",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "./start.sh",
+    "doctor": "./start.sh doctor",
+    "doctor:quick": "./start.sh doctor --quick",
+    "test": "bats tests/bats/unit/",
+    "lint": "shellcheck -S warning start.sh lib/*.sh bin/*.sh"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "keywords": [
+    "hermes-agent",
+    "oh-my-hermes",
+    "omh",
+    "agentic-memory",
+    "model-routing",
+    "evidence-boundaries",
+    "loop-engineering",
+    "linux"
+  ],
+  "author": "Kensan (Enterprise IT Team)",
+  "license": "MIT"
+}
