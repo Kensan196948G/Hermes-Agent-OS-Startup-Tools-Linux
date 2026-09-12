@@ -11,3 +11,6 @@ config/config.json
 .DS_Store
 *.swp
 *~
+
+# Claude Code ローカル実行時状態
+.claude/
